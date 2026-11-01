@@ -45,7 +45,7 @@ select = ["E", "W", "F", "I", "B", "UP", "S", "SIM", "PT", "RUF"]
 [tool.mypy]
 strict = true
 python_version = "3.13"
-files = ["src", "tests"]
+files = ["src", "tests", "eval"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
