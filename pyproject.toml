@@ -9,7 +9,9 @@ authors = [
     { name = "Waleed Hussain", email = "ID+waleed7715@users.noreply.github.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pydantic>=2.14.2",
+]
 
 [project.scripts]
 phishtriage = "phishtriage:main"
@@ -49,5 +51,5 @@ files = ["src", "tests", "eval"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra --strict-markers --cov=phishtriage --cov-report=term-missing"
+addopts = "-ra --import-mode=importlib --strict-markers --cov=phishtriage --cov-report=term-missing"
 markers = ["live: calls real external APIs; run manually only"]
