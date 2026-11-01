@@ -48,6 +48,8 @@ def main() -> None:
     if not (dest / ".git").exists():
         dest.parent.mkdir(parents=True, exist_ok=True)
         git("clone", "--filter=blob:none", "--no-checkout", url, str(dest))
+        (dest / ".git" / "info").mkdir(parents=True, exist_ok=True)
+        (dest / ".git" / "info" / "attributes").write_text("* -text\n")
     git("fetch", "--quiet", "origin", commit, cwd=dest)
     git("checkout", "--quiet", "--detach", commit, cwd=dest)
     if (head := git("rev-parse", "HEAD", cwd=dest)) != commit:
