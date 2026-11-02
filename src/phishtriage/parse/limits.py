@@ -16,6 +16,7 @@ class ParseLimits:
     max_header_value_chars: int = 8192
     max_text_chars: int = 200_000
     max_urls: int = 200
+    max_defects: int = 50
 
     def __post_init__(self) -> None:
         for field in dataclasses.fields(self):

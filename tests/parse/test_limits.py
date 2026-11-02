@@ -15,6 +15,7 @@ ALL_FIELDS = [
     "max_header_value_chars",
     "max_text_chars",
     "max_urls",
+    "max_defects",
 ]
 
 BAD_VALUES: list[Any] = [0, -1, True, False, "10", None, 3.14]
@@ -31,6 +32,7 @@ def test_default_limits() -> None:
     assert limits.max_header_value_chars == 8192
     assert limits.max_text_chars == 200_000
     assert limits.max_urls == 200
+    assert limits.max_defects == 50
 
 
 def test_override_field() -> None:
