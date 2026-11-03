@@ -150,3 +150,20 @@ def test_missing_wrapper_subject_is_none() -> None:
     result = unwrap_report(_parse(outer))
     assert result.layers == 1
     assert result.wrapper_subject is None
+
+
+def test_eml_named_multipart_part_raises() -> None:
+    raw = (
+        b"From: reporter@example.com\r\n"
+        b"MIME-Version: 1.0\r\n"
+        b"Content-Type: multipart/mixed; boundary=OUT\r\n\r\n"
+        b"--OUT\r\nContent-Type: text/plain\r\n\r\nsee attached\r\n"
+        b"--OUT\r\n"
+        b"Content-Type: multipart/mixed; boundary=IN\r\n"
+        b'Content-Disposition: attachment; filename="weird.eml"\r\n\r\n'
+        b"--IN\r\nContent-Type: text/plain\r\n\r\nx\r\n--IN--\r\n"
+        b"--OUT--\r\n"
+    )
+    msg, _ = load_message(raw)
+    with pytest.raises(NotAnEmail, match="not_an_email"):
+        unwrap_report(msg)
