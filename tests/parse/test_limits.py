@@ -17,6 +17,7 @@ ALL_FIELDS = [
     "max_urls",
     "max_defects",
     "max_unwrap_layers",
+    "max_addresses",
 ]
 
 BAD_VALUES: list[Any] = [0, -1, True, False, "10", None, 3.14]
@@ -35,6 +36,7 @@ def test_default_limits() -> None:
     assert limits.max_urls == 200
     assert limits.max_defects == 50
     assert limits.max_unwrap_layers == 3
+    assert limits.max_addresses == 100
 
 
 def test_override_field() -> None:

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from email.message import EmailMessage
 
 from phishtriage.parse.errors import NotAnEmail
+from phishtriage.parse.headers import header_text
 from phishtriage.parse.intake import load_message
 from phishtriage.parse.limits import DEFAULT_LIMITS, ParseLimits
 
@@ -60,15 +61,8 @@ def unwrap_report(message: EmailMessage, limits: ParseLimits = DEFAULT_LIMITS) -
     wrapper_subject: str | None = None
 
     if layers > 0:
-        try:
-            reporter = str(message["From"])[: limits.max_header_value_chars]
-        except Exception:
-            reporter = None
-
-        try:
-            wrapper_subject = str(message["Subject"])[: limits.max_header_value_chars]
-        except Exception:
-            wrapper_subject = None
+        reporter = header_text(message, "From", limits.max_header_value_chars)
+        wrapper_subject = header_text(message, "Subject", limits.max_header_value_chars)
 
     return UnwrapResult(
         message=current,

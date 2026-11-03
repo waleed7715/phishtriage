@@ -18,6 +18,7 @@ class ParseLimits:
     max_urls: int = 200
     max_defects: int = 50
     max_unwrap_layers: int = 3
+    max_addresses: int = 100
 
     def __post_init__(self) -> None:
         for field in dataclasses.fields(self):

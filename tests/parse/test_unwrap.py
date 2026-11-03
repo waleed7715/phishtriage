@@ -142,3 +142,11 @@ def test_reporter_and_subject_are_truncated() -> None:
     assert len(result.reporter) <= 20
     assert result.wrapper_subject is not None
     assert len(result.wrapper_subject) <= 20
+
+
+def test_missing_wrapper_subject_is_none() -> None:
+    outer = _wrap(_email("inner"), "FW: x")
+    del outer["Subject"]
+    result = unwrap_report(_parse(outer))
+    assert result.layers == 1
+    assert result.wrapper_subject is None
