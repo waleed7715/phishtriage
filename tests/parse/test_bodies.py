@@ -203,3 +203,20 @@ def test_collect_bodies_never_raises_and_text_is_clean(data: bytes) -> None:
         for part in collect_bodies(msg).plain:
             assert "\x00" not in part.text
             part.text.encode("utf-8")
+
+
+def test_nul_between_cr_and_lf_still_normalizes() -> None:
+    part = collect_bodies(_raw(b"text/plain; charset=utf-8", b"a\r\x00\nb")).plain[0]
+    assert part.text == "a\nb"
+
+
+def test_exact_budget_with_trailing_attachment_is_not_truncated() -> None:
+    msg = _multipart(
+        b"mixed",
+        b"Content-Type: text/plain; charset=utf-8\r\n\r\naaaa",
+        b"Content-Type: application/pdf\r\n"
+        b"Content-Disposition: attachment; filename=a.pdf\r\n\r\n%PDF",
+    )
+    bodies = collect_bodies(msg, ParseLimits(max_text_chars=4))
+    assert bodies.plain[0].text == "aaaa"
+    assert bodies.truncated is False

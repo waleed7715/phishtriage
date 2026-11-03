@@ -57,7 +57,7 @@ def decode_part(part: Message, max_chars: int) -> BodyPart | None:
         text = payload.decode(charset, errors="replace")
         decode_errors = True
 
-    text = text.replace("\r\n", "\n").replace("\x00", "")
+    text = text.replace("\x00", "").replace("\r\n", "\n")
 
     if len(text) > max_chars:
         truncated = True
@@ -82,10 +82,6 @@ def collect_bodies(msg: Message, limits: ParseLimits = DEFAULT_LIMITS) -> Bodies
     truncated = False
 
     while stack:
-        if remaining_chars <= 0:
-            truncated = True
-            break
-
         part = stack.pop()
 
         if part.get_content_disposition() == "attachment":
@@ -102,6 +98,10 @@ def collect_bodies(msg: Message, limits: ParseLimits = DEFAULT_LIMITS) -> Bodies
 
         if part.get_content_type() not in ("text/plain", "text/html"):
             continue
+
+        if remaining_chars <= 0:
+            truncated = True
+            break
 
         body_part = decode_part(part, remaining_chars)
         if not body_part:
