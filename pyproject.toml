@@ -13,6 +13,7 @@ dependencies = [
     "beautifulsoup4>=4.15.0",
     "idna>=3.20",
     "pydantic>=2.14.2",
+    "tldextract>=5.4.0",
 ]
 
 [project.scripts]
